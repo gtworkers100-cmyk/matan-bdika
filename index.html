@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>בדיקת מצב כלכלי | מסע להצלחה</title>
+<meta name="theme-color" content="#0e2745">
+<meta name="description" content="10 שאלות קצרות, ותדעו איפה הכסף שלכם עומד ומה הצעד הראשון לסדר. מסע להצלחה, מתן רג'ואן.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+/* צבעי המותג מהאתר של מתן (success-journey.co.il). הלוגו והתמונה נטענים מהאתר שלו עד שיגיעו הקבצים */
+:root{--navy:#0e2745;--ink:#151f32;--teal:#007370;--teal2:#22b5ae;--gold:#c9a15b;--bg:#f3f5f8;--card:#fff;--muted:#515c6c;--line:#dce2e9;--soft:#aeb9c4;--bad:#b4442f;--ok:#007370}
+*{box-sizing:border-box}
+html{scrollbar-gutter:stable;overflow-y:scroll}
+body{margin:0;font-family:Heebo,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;-webkit-font-smoothing:antialiased}
+.band{background:radial-gradient(120% 140% at 50% 0%,#18406b 0%,var(--navy) 60%);height:230px;position:absolute;inset:0 0 auto 0;z-index:0}
+.band:after{content:"";position:absolute;inset:auto 0 0 0;height:3px;background:linear-gradient(90deg,var(--teal2),var(--gold))}
+.wrap{position:relative;z-index:1;max-width:600px;margin:0 auto;padding:22px 16px 50px}
+header{text-align:center;padding:0 0 18px}
+header img{height:84px;width:auto;display:inline-block}
+.card{background:var(--card);border-radius:20px;padding:30px 26px;box-shadow:0 18px 50px rgba(14,39,69,.16),0 2px 6px rgba(14,39,69,.06)}
+h1{font-size:30px;line-height:1.25;margin:0 0 12px;font-weight:800;color:var(--navy);letter-spacing:-.3px}
+h1 em{font-style:normal;color:var(--teal)}
+h2{font-size:22px;line-height:1.35;margin:0 0 18px;font-weight:700;color:var(--navy)}
+p{margin:0 0 14px}
+.lead{font-size:17px;color:var(--muted)}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 22px}
+.pills span{background:#e8f3f2;color:var(--teal);border-radius:30px;padding:5px 13px;font-size:14px;font-weight:700}
+.btn{display:block;border:0;border-radius:14px;background:linear-gradient(135deg,var(--teal) 0%,#0a8f8a 100%);color:#fff;font:700 18px Heebo,Arial,sans-serif;padding:15px 26px;cursor:pointer;width:100%;box-shadow:0 8px 20px rgba(0,115,112,.28);transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,115,112,.34)}
+.btn:disabled{opacity:.6;cursor:default;transform:none}
+.about{display:flex;gap:14px;align-items:center;margin-top:22px;padding-top:18px;border-top:1px solid var(--line)}
+.about img{width:58px;height:58px;border-radius:50%;object-fit:cover;flex:none;border:2px solid var(--gold)}
+.about p{margin:0;font-size:14px;color:var(--muted);line-height:1.5}
+.about b{color:var(--navy)}
+.progress{height:6px;background:var(--line);border-radius:6px;overflow:hidden;margin:8px 0 22px}
+.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal2),var(--teal));transition:width .35s}
+.step{font-size:13px;color:var(--muted);font-weight:500}
+.opts{display:grid;gap:10px}
+.opt{display:flex;align-items:center;gap:12px;width:100%;text-align:right;border:1.5px solid var(--line);background:#fff;border-radius:14px;padding:14px 16px;font:500 16px Heebo,Arial,sans-serif;color:var(--ink);cursor:pointer;transition:border-color .12s,background .12s,box-shadow .12s}
+.opt:before{content:"";width:18px;height:18px;border-radius:50%;border:2px solid var(--soft);flex:none;transition:all .12s}
+.opt:hover{border-color:var(--teal2);box-shadow:0 2px 10px rgba(14,39,69,.06)}
+.opt.sel{border-color:var(--teal);background:#eef7f6}
+.opt.sel:before{border-color:var(--teal);background:var(--teal);box-shadow:inset 0 0 0 3px #fff}
+.sub{margin-top:18px;padding:16px;border-radius:14px;background:#f7f9fb;border:1px dashed var(--soft)}
+.sub h3{font-size:17px;margin:0 0 12px;color:var(--navy)}
+.nav{display:flex;gap:10px;margin-top:14px}
+.back{background:none;border:0;color:var(--muted);font:500 15px Heebo,Arial,sans-serif;cursor:pointer;padding:8px 0}
+.screen{animation:in .28s ease}
+@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.res{display:flex;align-items:center;gap:18px;margin:6px 0 18px}
+.ring{position:relative;width:104px;height:104px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;font-size:30px;font-weight:800;color:var(--navy);line-height:1}
+.ring b small{font-size:11px;font-weight:500;color:var(--muted);margin-top:4px}
+.badge{display:inline-block;border-radius:30px;padding:5px 14px;font-size:15px;font-weight:700;margin-bottom:6px}
+.b1{background:#e8f3f2;color:var(--teal)}.b2{background:#f8efdd;color:#8a6420}.b3{background:#f8e3de;color:var(--bad)}
+.gaps{list-style:none;padding:0;margin:0 0 20px}
+.gaps li{position:relative;background:#f7f9fb;border-radius:12px;padding:12px 40px 12px 14px;margin-bottom:8px;font-size:15px}
+.gaps li:before{content:"";position:absolute;right:15px;top:18px;width:10px;height:10px;border-radius:50%;background:var(--gold)}
+.offer{background:linear-gradient(135deg,var(--navy),#18406b);color:#fff;border-radius:16px;padding:20px 18px;margin:6px 0 4px}
+.offer h2{color:#fff;margin:0 0 6px}
+.offer p{color:#dce2e9;margin:0;font-size:15px}
+label{display:block;font-weight:500;margin:14px 0 6px;color:var(--navy)}
+input[type=text],input[type=tel],input[type=email]{width:100%;border:1.5px solid var(--line);border-radius:12px;padding:12px 14px;font:16px Heebo,Arial,sans-serif;background:#fff;color:var(--ink)}
+input:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 3px rgba(0,115,112,.12)}
+input.err{border-color:var(--bad)}
+.errmsg{color:var(--bad);font-size:14px;min-height:20px;margin-top:6px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.two{grid-template-columns:1fr 1fr}
+.chk{display:flex;gap:10px;align-items:flex-start;font-weight:400;font-size:14px;color:var(--muted);margin-top:16px;background:#f7f9fb;border-radius:12px;padding:12px}
+.chk input{margin-top:3px;width:18px;height:18px;flex:none;accent-color:var(--teal)}
+.hp{position:absolute;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;white-space:nowrap}
+.small{font-size:13px;color:var(--muted)}
+.done{text-align:center;padding:10px 0}
+.done .ic{width:64px;height:64px;border-radius:50%;background:#e8f3f2;color:var(--teal);display:inline-flex;align-items:center;justify-content:center;font-size:32px;margin-bottom:12px}
+footer{text-align:center;font-size:13px;color:var(--muted);margin-top:22px;line-height:1.7}
+footer a{color:var(--muted)}
+@media (max-width:420px){h1{font-size:25px}.card{padding:24px 18px}.row2{grid-template-columns:1fr}header img{height:72px}}
+</style>
+</head>
+<body>
+<div class="band"></div>
+<div class="wrap">
+  <header><img src="https://success-journey.co.il/assets/logo-reverse.png" alt="מסע להצלחה"></header>
+  <main id="app" class="card" aria-live="polite"></main>
+  <footer>מסע להצלחה · מתן רג'ואן, יועץ משכנתאות ומלווה פיננסי<br>הבדיקה נותנת תמונה כללית בלבד, ואינה ייעוץ פיננסי או תחליף לפגישה אישית<br><a href="privacy.html">מדיניות פרטיות</a></footer>
+</div>
+
+<script>
+// ===== הגדרות =====
+var ENDPOINT = 'https://script.google.com/macros/s/AKfycbwDlH7aDUIDHHWlkOGGEl6RDR9QHIdVVP23UCjg0qm5vyLGu-rVIOLMm_dNwZMy0T9McA/exec'; // כתובת ה-exec של Apps Script. ריק = מצב בדיקה, לא נשלח כלום
+var AUTO_NEXT_MS = 380;
+
+var params = new URLSearchParams(location.search);
+var SRC = (params.get('src') || 'ישיר').slice(0, 40);
+
+// ===== השאלות =====
+// score = כמה הפער גדול. gap = מה מופיע בתוצאה כשהפער קיים
+var Q = [
+  {id:'who', q:'מי ממלא את הבדיקה?', opts:[
+    {v:'משפחה או זוג', s:0},{v:'יחיד או יחידה', s:0},{v:'בעל או בעלת עסק', s:0, sub:'mix'}]},
+  {id:'month', q:'איך נגמר אצלכם החודש בדרך כלל?', opts:[
+    {v:'נשאר כסף בצד', s:0},{v:'בערך מאוזן', s:1},{v:'מינוס קטן', s:2,gap:'החודש נגמר במינוס. בדרך כלל זה לא חוסר בהכנסה, אלא כמה הוצאות שלא רואים.'},
+    {v:'מינוס קבוע', s:3,gap:'המינוס קבוע. כל חודש בו משלמים עליו ריבית, ובלי תוכנית הוא נוטה לגדול.'}]},
+  {id:'track', q:'אתם יודעים לאן הולך הכסף כל חודש?', opts:[
+    {v:'כן, יש תקציב ואנחנו עוקבים', s:0},{v:'בערך', s:1,gap:'יש תמונה כללית, אבל לא תקציב. קשה לשפר משהו שלא מודדים.'},
+    {v:'ממש לא', s:2,gap:'אין תמונה ברורה של ההוצאות. זה המקום הראשון שבו בדרך כלל מוצאים כסף.'}]},
+  {id:'debt', q:'הלוואות וחובות, לא כולל משכנתא:', opts:[
+    {v:'אין', s:0},{v:'הלוואה אחת', s:1},{v:'כמה הלוואות', s:2,gap:'יש כמה הלוואות במקביל. לפעמים איחוד או סדר עדיפויות בהחזר חוסך הרבה ריבית.'},
+    {v:'לא יודעים בדיוק כמה', s:3,gap:'לא ברור כמה חוב יש בדיוק. מיפוי של כל ההלוואות הוא צעד ראשון לשקט.'}]},
+  {id:'cushion', q:'יש לכם כרית ביטחון של 3 חודשי הוצאות?', opts:[
+    {v:'כן', s:0},{v:'חלקית', s:1,gap:'כרית הביטחון חלקית. הוצאה לא צפויה אחת יכולה להחזיר אתכם למינוס.'},
+    {v:'אין', s:2,gap:'אין כרית ביטחון. כל הוצאה לא צפויה הופכת להלוואה או למינוס.'}]},
+  {id:'emotion', q:'קורה שאתם קונים משהו ואחר כך מצטערים?', opts:[
+    {v:'כמעט אף פעם', s:0},{v:'לפעמים', s:1},
+    {v:'הרבה', s:2,gap:'יש הוצאות רגשיות. זה נפוץ מאוד, ויש כלים פשוטים לשלוט בזה בלי להרגיש מוגבלים.'}]},
+  {id:'goal', q:'מה הכי חשוב לכם עכשיו?', opts:[
+    {v:'לצאת מהמינוס'},{v:'לחסוך למשהו גדול, כמו דירה או רכב'},{v:'להבין איך להשקיע'},{v:'שקט וסדר בכסף'}]},
+  {id:'mortgage', q:'ומה עם משכנתא?', opts:[
+    {v:'אין ולא מתכננים'},{v:'מתכננים לקנות דירה', m:1},{v:'יש משכנתא ושוקלים מחזור', m:1},{v:'יש משכנתא ולא נוגעים בה'}]},
+  {id:'commit', q:'ליווי כזה הוא מפגש אחד בשבוע לאורך 3 חודשים. זה מתאים לכם?', opts:[
+    {v:'כן'},{v:'אולי, תלוי'},{v:'לא עכשיו'}]},
+  {id:'when', q:'מתי הייתם רוצים להתחיל?', opts:[
+    {v:'כמה שיותר מהר'},{v:'בחודשיים הקרובים'},{v:'רק בודקים בינתיים'}]}
+];
+var SUB = {mix:{id:'mix', q:'הכסף של העסק ושל הבית מעורבב?', opts:[
+  {v:'כן', s:2,gap:'הכסף של העסק ושל הבית מעורבב. קשה לדעת כמה העסק באמת מרוויח וכמה אפשר למשוך.'},
+  {v:'חלקית', s:1,gap:'יש ערבוב חלקי בין כסף של העסק לכסף של הבית.'},{v:'לא, מופרד', s:0}]}};
+
+// ===== קו אדום ותחום (ימולא לפי התשובה של מתן) =====
+var RED_LINE = []; // דוגמה: [{id:'who', v:'...'}]. תשובה שנמצאת כאן = לא נשמר כלום
+
+var A = {}, idx = 0, started = false, sending = false;
+var app = document.getElementById('app');
+
+function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+
+function ping(t){
+  if(!ENDPOINT) return;
+  try{fetch(ENDPOINT,{method:'POST',mode:'no-cors',headers:{'Content-Type':'text/plain'},body:JSON.stringify({t:t,src:SRC})})}catch(e){}
+}
+
+function intro(){
+  app.innerHTML = '<div class="screen">'+
+    '<h1>הכסף שלכם <em>עובד בשבילכם</em>, או נעלם כל חודש?</h1>'+
+    '<p class="lead">בדיקה קצרה של 10 שאלות, בערך 2 דקות. בסוף מקבלים תמונה של המצב, ומה הצעד הראשון לסדר.</p>'+
+    '<div class="pills"><span>בלי עלות</span><span>בלי להזין סכומים</span><span>תוצאה מיד</span></div>'+
+    '<button class="btn" id="go">מתחילים</button>'+
+    '<div class="about"><img src="https://success-journey.co.il/assets/matan-profile.jpg" alt="מתן רג\'ואן"><p><b>מתן רג\'ואן</b>, יועץ משכנתאות ומלווה פיננסי. מלווה משפחות ובעלי עסקים קטנים ובינוניים בסדר בכסף.</p></div></div>';
+  document.getElementById('go').onclick = function(){ idx = 0; question(true); };
+}
+
+function question(anim){
+  var q = Q[idx];
+  var html = '<div class="'+(anim?'screen':'')+'">'+
+    '<div class="step">שאלה '+(idx+1)+' מתוך '+Q.length+'</div>'+
+    '<div class="progress"><i style="width:'+((idx+1)/Q.length*100)+'%"></i></div>'+
+    '<h2>'+esc(q.q)+'</h2><div class="opts" data-q="'+q.id+'">';
+  q.opts.forEach(function(o,i){ html += '<button class="opt'+(A[q.id]===o.v?' sel':'')+'" data-i="'+i+'">'+esc(o.v)+'</button>'; });
+  html += '</div><div id="subbox"></div><div class="nav">';
+  if(idx>0) html += '<button class="back" id="back">חזרה</button>';
+  html += '</div></div>';
+  app.innerHTML = html;
+  bindOpts(app.querySelector('.opts'), q, true);
+  var cur = q.opts.filter(function(o){return o.v===A[q.id]})[0];
+  if(cur && cur.sub) showSub(cur.sub);
+  var b = document.getElementById('back'); if(b) b.onclick = function(){ idx--; question(true); };
+}
+
+function bindOpts(box, q, main){
+  box.querySelectorAll('.opt').forEach(function(btn){
+    btn.onclick = function(){
+      if(!started){ started = true; ping('start'); }
+      var o = q.opts[+btn.dataset.i];
+      A[q.id] = o.v;
+      box.querySelectorAll('.opt').forEach(function(x){x.classList.toggle('sel', x===btn)});
+      if(main){
+        var sb = document.getElementById('subbox');
+        if(o.sub){ if(!sb.innerHTML) showSub(o.sub); return; }
+        sb.innerHTML = ''; delete A.mix;
+      }
+      setTimeout(next, AUTO_NEXT_MS);
+    };
+  });
+}
+
+function showSub(key){
+  var s = SUB[key], sb = document.getElementById('subbox');
+  var h = '<div class="sub"><h3>'+esc(s.q)+'</h3><div class="opts">';
+  s.opts.forEach(function(o,i){ h += '<button class="opt'+(A[s.id]===o.v?' sel':'')+'" data-i="'+i+'">'+esc(o.v)+'</button>'; });
+  sb.innerHTML = h + '</div></div>';
+  bindOpts(sb.querySelector('.opts'), s, false);
+}
+
+function next(){ idx++; if(idx < Q.length) question(true); else result(); }
+
+function find(id){ var q = Q.filter(function(x){return x.id===id})[0] || SUB[id]; return q.opts.filter(function(o){return o.v===A[id]})[0] || {}; }
+
+function evaluate(){
+  var score = 0, max = 0, gaps = [];
+  Q.concat(A.mix!==undefined?[SUB.mix]:[]).forEach(function(q){
+    var mx = Math.max.apply(null, q.opts.map(function(o){return o.s||0}));
+    if(!mx) return;
+    max += mx; var o = find(q.id); score += (o.s||0); if(o.gap) gaps.push(o.gap);
+  });
+  var pct = max ? Math.round(score/max*100) : 0;
+  var level = pct < 25 ? 1 : (pct < 55 ? 2 : 3);
+  var red = RED_LINE.some(function(r){return A[r.id]===r.v});
+  var mortgage = !!find('mortgage').m;
+  var fit;
+  if(red) fit = 'קו אדום';
+  else if(A.commit==='לא עכשיו' && A.when==='רק בודקים בינתיים' && !mortgage) fit = 'לא מתאים';
+  else if(A.commit==='כן' && A.when!=='רק בודקים בינתיים' && level>1) fit = 'מתאים';
+  else fit = 'לבדיקה';
+  return {pct:pct, level:level, gaps:gaps, fit:fit, mortgage:mortgage};
+}
+
+function ring(v, lv){
+  var c = {1:'#007370',2:'#c9a15b',3:'#b4442f'}[lv], C = 2*Math.PI*44, off = C*(1-v/100);
+  var titles = {1:'המצב שלכם טוב', 2:'יש מה לסדר', 3:'הגיע הזמן לעשות סדר'};
+  return '<div class="res"><div class="ring"><svg width="104" height="104"><circle cx="52" cy="52" r="44" fill="none" stroke="#dce2e9" stroke-width="9"/>'+
+    '<circle cx="52" cy="52" r="44" fill="none" stroke="'+c+'" stroke-width="9" stroke-linecap="round" stroke-dasharray="'+C+'" stroke-dashoffset="'+off+'"/></svg>'+
+    '<b>'+v+'<small>מתוך 100</small></b></div><div><span class="badge b'+lv+'">'+titles[lv]+'</span><div class="small">מדד הסדר הכלכלי שלכם</div></div></div>';
+}
+
+function result(){
+  var r = evaluate(); window.__R = r;
+  var titles = {1:'המצב שלכם טוב', 2:'יש מה לסדר', 3:'הגיע הזמן לעשות סדר'};
+  var texts = {
+    1:'לפי התשובות, הבסיס אצלכם יציב. הנה כמה דברים ששווה לשים לב אליהם כדי לשמור על זה ולהתקדם ליעדים.',
+    2:'לפי התשובות, יש כמה נקודות שבהן הכסף בורח. אלה בדיוק הדברים שעובדים עליהם בפגישת מיפוי.',
+    3:'לפי התשובות, יש כמה פערים שמכבידים עליכם כל חודש. החדשות הטובות: את רובם אפשר לסדר צעד אחרי צעד.'};
+  var html = '<div class="screen"><div class="step">התוצאה שלכם</div>'+
+    ring(100-r.pct, r.level)+
+    '<p>'+texts[r.level]+'</p>';
+  if(r.gaps.length){ html += '<ul class="gaps">'; r.gaps.slice(0,4).forEach(function(g){ html += '<li>'+esc(g)+'</li>'; }); html += '</ul>'; }
+  else html += '<ul class="gaps"><li>המשיכו לעקוב אחרי התקציב פעם בחודש.</li><li>הגדירו יעד אחד ברור לחיסכון, עם סכום ותאריך.</li></ul>';
+  if(r.fit==='קו אדום'){ html += '<p class="small">תודה שמילאתם. כרגע זה לא השירות המתאים לכם.</p></div>'; app.innerHTML = html; return; }
+  var soft = r.level===1 || r.fit==='לא מתאים';
+  html += '<div class="offer"><h2>'+(soft?'רוצים שמתן יחזור אליכם?':'פגישת מיפוי עם מתן, בלי עלות')+'</h2>'+
+    '<p>'+(soft?'אפשר להשאיר פרטים, ומתן יחזור אליכם כשנוח.':'בזום או פנים אל פנים. עוברים על התמונה המלאה ויוצאים עם צעד ראשון ברור.')+'</p></div>'+
+    form() + '</div>';
+  app.innerHTML = html;
+  bindForm(r);
+}
+
+function form(){
+  return '<form id="f" novalidate>'+
+    '<label for="name">שם</label><input type="text" id="name" autocomplete="name" maxlength="60">'+
+    '<label for="phone">טלפון נייד</label><input type="tel" id="phone" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="05X-XXXXXXX">'+
+    '<div class="row2"><div><label for="email">מייל (לא חובה)</label><input type="email" id="email" autocomplete="email" maxlength="80"></div>'+
+    '<div><label for="city">עיר</label><input type="text" id="city" maxlength="40"></div></div>'+
+    '<label>איך נוח לכם להיפגש?</label><div class="opts two" id="meet">'+
+    '<button type="button" class="opt" data-v="זום">זום</button><button type="button" class="opt" data-v="פנים אל פנים">פנים אל פנים</button></div>'+
+    '<div class="hp" aria-hidden="true"><label for="website">אתר</label><input type="text" id="website" tabindex="-1" autocomplete="off"></div>'+
+    '<label class="chk"><input type="checkbox" id="ok"> <span>אני מאשר/ת שמתן רג\'ואן ממסע להצלחה יחזור אליי בטלפון או בוואטסאפ לגבי הבדיקה.</span></label>'+
+    '<div class="errmsg" id="err"></div>'+
+    '<button class="btn" id="send" type="submit">שלחו לי</button></form>';
+}
+
+function normPhone(p){ p = String(p).replace(/[^\d+]/g,''); if(p.indexOf('+972')===0) p = '0'+p.slice(4); else if(p.indexOf('972')===0) p = '0'+p.slice(3); return p; }
+
+function bindForm(r){
+  var meet = '';
+  document.querySelectorAll('#meet .opt').forEach(function(b){ b.onclick = function(){ meet = b.dataset.v; document.querySelectorAll('#meet .opt').forEach(function(x){x.classList.toggle('sel',x===b)}); }; });
+  document.getElementById('f').onsubmit = function(ev){
+    ev.preventDefault(); if(sending) return;
+    var name = document.getElementById('name'), phone = document.getElementById('phone'), email = document.getElementById('email');
+    var err = document.getElementById('err'); [name,phone,email].forEach(function(x){x.classList.remove('err')});
+    var ph = normPhone(phone.value);
+    if(name.value.trim().length < 2){ name.classList.add('err'); err.textContent = 'נא לכתוב שם'; return; }
+    if(!/^05\d{8}$/.test(ph)){ phone.classList.add('err'); err.textContent = 'נא לכתוב מספר נייד תקין, 10 ספרות שמתחיל ב-05'; return; }
+    if(email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())){ email.classList.add('err'); err.textContent = 'כתובת המייל לא תקינה'; return; }
+    if(!document.getElementById('ok').checked){ err.textContent = 'צריך לסמן אישור כדי שמתן יוכל לחזור אליכם'; return; }
+    err.textContent = ''; sending = true; var btn = document.getElementById('send'); btn.disabled = true; btn.textContent = 'שולח...';
+    var payload = {t:'lead', src:SRC, name:name.value.trim(), phone:ph, email:email.value.trim(), city:document.getElementById('city').value.trim(),
+      meet:meet, answers:A, pct:r.pct, level:r.level, fit:r.fit, mortgage:r.mortgage, hp:document.getElementById('website').value};
+    window.__LAST = payload;
+    if(!ENDPOINT){ done(); return; }
+    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
+      .then(function(res){return res.json()}).then(function(j){ if(j && j.ok) done(); else fail(); }).catch(fail);
+  };
+}
+
+function done(){ app.innerHTML = '<div class="screen done"><div class="ic">✓</div><h2>קיבלנו, תודה</h2><p>מתן יחזור אליכם בהקדם, בטלפון או בוואטסאפ.</p><p class="small">בינתיים, שווה להתחיל לרשום הוצאות של שבוע אחד. זה הבסיס לכל סדר בכסף.</p></div>'; }
+function fail(){ sending = false; var b = document.getElementById('send'); b.disabled = false; b.textContent = 'שלחו לי'; document.getElementById('err').textContent = 'משהו השתבש בשליחה. נסו שוב בעוד רגע.'; }
+
+ping('visit');
+intro();
+</script>
+</body>
+</html>
