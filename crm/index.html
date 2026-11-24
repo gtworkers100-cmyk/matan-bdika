@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>לידים | מסע להצלחה</title>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#151f32;--navy:#0e2745;--brand:#007370;--brand2:#0a8f8a;--gold:#c9a15b;--bg:#f3f5f8;--card:#fff;--muted:#515c6c;--line:#dce2e9}
+*{box-sizing:border-box}
+.stat{box-shadow:0 2px 8px rgba(14,39,69,.05)}
+html{scrollbar-gutter:stable;overflow-y:scroll}
+body{margin:0;font-family:Heebo,Arial,sans-serif;background:var(--bg);color:var(--ink)}
+.top{background:var(--navy);color:#fff;padding:10px 20px;display:flex;justify-content:space-between;align-items:center;border-bottom:3px solid var(--gold)}.top img{height:46px;vertical-align:middle;margin-left:12px}
+.top b{font-size:19px}.top span{opacity:.8;font-size:14px}
+.wrap{max-width:1100px;margin:0 auto;padding:18px}
+.login{max-width:380px;margin:60px auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:26px}
+input,select,textarea{font:15px Heebo,Arial,sans-serif;border:1.5px solid var(--line);border-radius:10px;padding:10px 12px;background:#fff;color:var(--ink)}
+input,textarea{width:100%}
+.btn{border:0;border-radius:10px;background:var(--brand);color:#fff;font:700 15px Heebo,Arial,sans-serif;padding:10px 18px;cursor:pointer}
+.btn.wa{background:#1f8f4e}.btn.light{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.bar input{max-width:260px}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1.5px solid var(--line);background:#fff;border-radius:30px;padding:6px 14px;cursor:pointer;font:500 14px Heebo,Arial,sans-serif;color:var(--ink)}
+.tab.on{background:var(--brand);color:#fff;border-color:var(--brand)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px}
+.stat b{display:block;font-size:24px;color:var(--brand)}.stat span{font-size:13px;color:var(--muted)}
+table{width:100%;border-collapse:collapse;background:#fff;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+th{background:var(--navy);color:#fff;font-weight:500;font-size:14px;padding:10px;text-align:center;cursor:pointer;white-space:nowrap}
+td{padding:10px;border-top:1px solid var(--line);font-size:14px;text-align:center}
+td.l{text-align:right}
+tr.r:hover td{background:#f6faf9;cursor:pointer}
+.pill{display:inline-block;border-radius:20px;padding:2px 10px;font-size:13px;font-weight:500;background:#eef2f1}
+.f1{background:#e8f3f2;color:#007370}.f2{background:#f8efdd;color:#8a6420}
+.modal{position:fixed;inset:0;background:rgba(20,48,47,.45);display:none;align-items:flex-start;justify-content:center;padding:30px 12px;overflow:auto}
+.modal.on{display:flex}
+.box{background:#fff;border-radius:16px;max-width:620px;width:100%;padding:22px}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:6px 12px;font-size:14px;margin:12px 0}
+.kv div:nth-child(odd){color:var(--muted)}
+.ans{background:#faf7f0;border-radius:10px;padding:12px;font-size:14px;line-height:1.7}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;align-items:center}
+.err{color:#b4442f;font-size:14px;min-height:20px;margin-top:8px}
+h3{margin:18px 0 8px}
+@media (max-width:700px){.hide-m{display:none}.kv{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="top"><div><img src="https://success-journey.co.il/assets/logo-reverse.png" alt=""><b>לידים</b></div><span id="who"></span></div>
+<div class="wrap" id="app"></div>
+<div class="modal" id="modal"><div class="box" id="box"></div></div>
+<script>
+var API = 'https://script.google.com/macros/s/AKfycbwDlH7aDUIDHHWlkOGGEl6RDR9QHIdVVP23UCjg0qm5vyLGu-rVIOLMm_dNwZMy0T9McA/exec'; // אותה כתובת exec של Apps Script
+var KEY = '', DATA = null, FILTER = 'הכל', SORT = {c:0, d:-1}, Q = '';
+var C = {date:0,name:1,phone:2,email:3,src:4,want:5,status:6,talk:7,note:8,fit:9,level:10,score:11,who:12,product:13,city:14,meet:15,answers:16};
+var app = document.getElementById('app');
+function esc(s){return String(s==null?'':s).replace(/[&<>"']/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
+function call(body){ body.key = KEY; return fetch(API,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(body)}).then(function(r){return r.json()}); }
+
+function login(msg){
+  app.innerHTML = '<div class="login"><h2 style="margin-top:0">כניסה</h2><p style="color:var(--muted)">קוד הכניסה שקיבלת מאיתנו</p>'+
+    '<input id="k" type="password" autocomplete="current-password"><div class="err" id="e">'+esc(msg||'')+'</div><button class="btn" id="b" style="width:100%">כניסה</button></div>';
+  var go = function(){ KEY = document.getElementById('k').value.trim(); load(); };
+  document.getElementById('b').onclick = go;
+  document.getElementById('k').onkeydown = function(e){ if(e.key==='Enter') go(); };
+}
+
+function load(){
+  if(!API){ login('האתר עוד לא מחובר לשרת'); return; }
+  call({action:'list'}).then(function(j){
+    if(!j.ok){ login(j.error==='locked'?'יותר מדי ניסיונות. נסו שוב בעוד 10 דקות':'קוד שגוי'); return; }
+    try{ sessionStorage.setItem('mrk', KEY); }catch(e){}
+    DATA = j; render();
+  }).catch(function(){ login('אין חיבור לשרת. נסו שוב'); });
+}
+
+function srcName(code){ var s = DATA.sources[code]; return s ? s.name : code; }
+
+function render(){
+  var rows = DATA.rows, st = DATA.statuses;
+  var cnt = function(f){ return rows.filter(f).length; };
+  var html = '<div class="stats">'+
+    '<div class="stat"><b>'+rows.length+'</b><span>לידים</span></div>'+
+    '<div class="stat"><b>'+cnt(function(r){return r.v[C.status]==='חדש'})+'</b><span>חדשים, לא טופלו</span></div>'+
+    '<div class="stat"><b>'+cnt(function(r){return r.v[C.status]==='נקבעה פגישה'})+'</b><span>נקבעה פגישה</span></div>'+
+    '<div class="stat"><b>'+cnt(function(r){return r.v[C.status]==='לקוח'})+'</b><span>לקוחות</span></div></div>';
+  html += '<div class="bar"><input id="q" placeholder="חיפוש לפי שם או טלפון" value="'+esc(Q)+'"><div class="tabs">';
+  ['הכל'].concat(st).forEach(function(s){ html += '<button class="tab'+(FILTER===s?' on':'')+'" data-s="'+esc(s)+'">'+esc(s)+'</button>'; });
+  html += '</div><button class="btn light" id="ref">רענון</button></div>';
+  var list = rows.filter(function(r){ return (FILTER==='הכל'||r.v[C.status]===FILTER) && (!Q || (r.v[C.name]+r.v[C.phone]).indexOf(Q)>=0); });
+  list.sort(function(a,b){ var x=a.v[SORT.c], y=b.v[SORT.c]; if(SORT.c===0){x=a.row;y=b.row;} return (x>y?1:x<y?-1:0)*SORT.d; });
+  var cols = [['תאריך',0],['שם',1],['טלפון',2],['סיווג',9],['מוצר',13],['מקור',4],['סטטוס',6]];
+  html += '<table><thead><tr>'; cols.forEach(function(c,i){ html += '<th data-c="'+c[1]+'" class="'+(i===4||i===5?'hide-m':'')+'">'+c[0]+(SORT.c===c[1]?(SORT.d>0?' ▲':' ▼'):'')+'</th>'; });
+  html += '</tr></thead><tbody>';
+  if(!list.length) html += '<tr><td colspan="7" style="color:var(--muted);padding:24px">אין לידים כאן עדיין</td></tr>';
+  list.forEach(function(r){ var v = r.v;
+    html += '<tr class="r" data-row="'+r.row+'"><td>'+esc(v[C.date].split(' ')[0])+'</td><td class="l">'+esc(v[C.name])+'</td><td dir="ltr">'+esc(v[C.phone])+'</td>'+
+      '<td><span class="pill '+(v[C.fit]==='מתאים'?'f1':'f2')+'">'+esc(v[C.fit]||'-')+'</span></td><td class="hide-m">'+esc(v[C.product])+'</td>'+
+      '<td class="hide-m">'+esc(srcName(v[C.src]))+'</td><td><span class="pill">'+esc(v[C.status])+'</span></td></tr>'; });
+  html += '</tbody></table>';
+  html += '<h3>לפי מקור</h3><table><thead><tr><th>מקור</th><th>כניסות</th><th>התחלות</th><th>לידים</th><th>פגישות</th><th>לקוחות</th></tr></thead><tbody>';
+  var by = {}; rows.forEach(function(r){ var k = r.v[C.src]||'ישיר'; by[k] = by[k]||{l:0,m:0,c:0}; by[k].l++; if(['נקבעה פגישה','לקוח','לא סגר'].indexOf(r.v[C.status])>=0) by[k].m++; if(r.v[C.status]==='לקוח') by[k].c++; });
+  Object.keys(DATA.sources).forEach(function(k){ var s = DATA.sources[k]; if(+s.visits>0 && !by[k]) by[k] = {l:0,m:0,c:0}; });
+  var keys = Object.keys(by);
+  if(!keys.length) html += '<tr><td colspan="6" style="color:var(--muted)">עוד אין נתונים</td></tr>';
+  keys.forEach(function(k){ var s = DATA.sources[k]||{};
+    html += '<tr><td class="l">'+esc(srcName(k))+'</td><td>'+esc(s.visits||'-')+'</td><td>'+esc(s.starts||'-')+'</td><td>'+by[k].l+'</td><td>'+by[k].m+'</td><td>'+by[k].c+'</td></tr>'; });
+  html += '</tbody></table>';
+  app.innerHTML = html;
+  var q = document.getElementById('q'); q.oninput = function(){ Q = q.value.trim(); render(); var n=document.getElementById('q'); n.focus(); n.setSelectionRange(Q.length,Q.length); };
+  app.querySelectorAll('.tab').forEach(function(t){ t.onclick = function(){ FILTER = t.dataset.s; render(); }; });
+  app.querySelectorAll('th').forEach(function(t){ t.onclick = function(){ var c=+t.dataset.c; SORT = {c:c, d: SORT.c===c?-SORT.d:-1}; render(); }; });
+  app.querySelectorAll('tr.r').forEach(function(t){ t.onclick = function(){ open(+t.dataset.row); }; });
+  document.getElementById('ref').onclick = load;
+}
+
+function open(rowNum){
+  var r = DATA.rows.filter(function(x){return x.row===rowNum})[0], v = r.v;
+  var first = v[C.name].split(' ')[0];
+  var msg = 'היי '+first+', כאן מתן רג\'ואן ממסע להצלחה. ראיתי שמילאת את הבדיקה הכלכלית באתר. מתי נוח לך לשיחה קצרה?';
+  var wa = 'https://wa.me/972'+String(v[C.phone]).replace(/\D/g,'').slice(1)+'?text='+encodeURIComponent(msg);
+  var kv = [['טלפון',v[C.phone]],['מייל',v[C.email]||'-'],['עיר',v[C.city]||'-'],['פגישה',v[C.meet]||'-'],['מי',v[C.who]],['מה חשוב',v[C.want]],
+    ['סיווג',v[C.fit]+' · '+v[C.level]],['מדד סדר',v[C.score]+' מתוך 100'],['מוצר',v[C.product]],['מקור',srcName(v[C.src])],['תאריך',v[C.date]],['שיחה ראשונה',v[C.talk]||'-']];
+  var h = '<h2 style="margin:0">'+esc(v[C.name])+'</h2><div class="kv">';
+  kv.forEach(function(p){ h += '<div>'+p[0]+'</div><div'+(p[0]==='טלפון'?' dir="ltr" style="text-align:right"':'')+'>'+esc(p[1])+'</div>'; });
+  h += '</div><div class="ans">'+esc(v[C.answers]).split(' | ').join('<br>')+'</div>';
+  h += '<div class="row"><select id="st">'; DATA.statuses.forEach(function(s){ h += '<option'+(s===v[C.status]?' selected':'')+'>'+esc(s)+'</option>'; });
+  h += '</select><a class="btn wa" href="'+wa+'" target="_blank" rel="noopener">וואטסאפ</a><a class="btn light" href="tel:'+esc(v[C.phone])+'">חיוג</a></div>';
+  h += '<h3>הערות</h3><textarea id="nt" rows="3">'+esc(v[C.note])+'</textarea><div class="err" id="me"></div>';
+  h += '<div class="row"><button class="btn" id="sv">שמירה</button><button class="btn light" id="cl">סגירה</button></div>';
+  document.getElementById('box').innerHTML = h;
+  document.getElementById('modal').classList.add('on');
+  document.getElementById('cl').onclick = close;
+  document.getElementById('sv').onclick = function(){
+    var st = document.getElementById('st').value, nt = document.getElementById('nt').value;
+    this.disabled = true;
+    call({action:'update', row:rowNum, status:st, note:nt}).then(function(j){
+      if(!j.ok){ document.getElementById('me').textContent = 'השמירה לא הצליחה'; document.getElementById('sv').disabled=false; return; }
+      v[C.status] = st; v[C.note] = nt; close(); render();
+    }).catch(function(){ document.getElementById('me').textContent = 'אין חיבור לשרת'; document.getElementById('sv').disabled=false; });
+  };
+}
+function close(){ document.getElementById('modal').classList.remove('on'); }
+document.getElementById('modal').onclick = function(e){ if(e.target.id==='modal') close(); };
+
+try{ KEY = sessionStorage.getItem('mrk') || ''; }catch(e){}
+if(KEY) load(); else login();
+</script>
+</body>
+</html>
