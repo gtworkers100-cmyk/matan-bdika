@@ -219,7 +219,7 @@ function showSub(key){
   bindOpts(sb.querySelector('.opts'), s, false);
 }
 
-function next(){ idx++; if(idx < Q.length) question(true); else result(); }
+function next(){ idx++; if(idx < Q.length){ send({t:'lead_progress', src:SRC, id:LID, name:LEAD.name, phone:LEAD.phone, hp:LEAD.hp, answers:A}); question(true); } else result(); }
 
 function find(id){ var q = Q.filter(function(x){return x.id===id})[0] || SUB[id]; return q.opts.filter(function(o){return o.v===A[id]})[0] || {}; }
 
