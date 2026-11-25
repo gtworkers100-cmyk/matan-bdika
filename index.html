@@ -47,7 +47,7 @@ p{margin:0 0 14px}
 .sub{margin-top:18px;padding:16px;border-radius:14px;background:#f7f9fb;border:1px dashed var(--soft)}
 .sub h3{font-size:17px;margin:0 0 12px;color:var(--navy)}
 .nav{display:flex;gap:10px;margin-top:14px}
-.back{background:none;border:0;color:var(--muted);font:500 15px Heebo,Arial,sans-serif;cursor:pointer;padding:8px 0}
+.back{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1.5px solid var(--teal);color:var(--teal);border-radius:30px;font:700 15px Heebo,Arial,sans-serif;cursor:pointer;padding:7px 16px}.back:hover{background:#eef7f6}.qtop{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
 .screen{animation:in .28s ease}
 @keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
 .res{display:flex;align-items:center;gap:18px;margin:6px 0 18px}
@@ -121,8 +121,8 @@ var Q = [
     {v:'לצאת מהמינוס'},{v:'לחסוך למשהו גדול, כמו דירה או רכב'},{v:'להבין איך להשקיע'},{v:'שקט וסדר בכסף'}]},
   {id:'mortgage', q:'ומה עם משכנתא?', opts:[
     {v:'אין ולא מתכננים'},{v:'מתכננים לקנות דירה', m:1},{v:'יש משכנתא ושוקלים מחזור', m:1},{v:'יש משכנתא ולא נוגעים בה'}]},
-  {id:'commit', q:'ליווי כזה הוא מפגש אחד בשבוע לאורך 3 חודשים. זה מתאים לכם?', opts:[
-    {v:'כן'},{v:'אולי, תלוי'},{v:'לא עכשיו'}]},
+  {id:'commit', q:'כמה זמן בשבוע תוכלו להקדיש לסדר בכסף?', opts:[
+    {v:'שעה בשבוע ויותר'},{v:'פחות משעה'},{v:'כרגע אין לי זמן לזה'}]},
   {id:'when', q:'מתי הייתם רוצים להתחיל?', opts:[
     {v:'כמה שיותר מהר'},{v:'בחודשיים הקרובים'},{v:'רק בודקים בינתיים'}]}
 ];
@@ -146,23 +146,48 @@ function ping(t){
 function intro(){
   app.innerHTML = '<div class="screen">'+
     '<h1>הכסף שלכם <em>עובד בשבילכם</em>, או נעלם כל חודש?</h1>'+
-    '<p class="lead">בדיקה קצרה של 10 שאלות, בערך 2 דקות. בסוף מקבלים תמונה של המצב, ומה הצעד הראשון לסדר.</p>'+
-    '<div class="pills"><span>בלי עלות</span><span>בלי להזין סכומים</span><span>תוצאה מיד</span></div>'+
-    '<button class="btn" id="go">מתחילים</button>'+
+    '<p class="lead">בדיקה קצרה של 10 שאלות, בערך 2 דקות. משאירים שם וטלפון, עונים, ומתן חוזר אליכם עם התמונה המלאה.</p>'+
+    '<div class="pills"><span>בלי עלות</span><span>בלי להזין סכומים</span><span>2 דקות</span></div>'+
+    '<form id="f" novalidate>'+
+    '<label for="name">שם</label><input type="text" id="name" autocomplete="name" maxlength="60">'+
+    '<label for="phone">טלפון נייד</label><input type="tel" id="phone" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="05X-XXXXXXX">'+
+    '<div class="hp" aria-hidden="true"><label for="website">אתר</label><input type="text" id="website" tabindex="-1" autocomplete="off"></div>'+
+    '<label class="chk"><input type="checkbox" id="ok"> <span>אני מאשר/ת שמתן רג\'ואן ממסע להצלחה יחזור אליי בטלפון או בוואטסאפ לגבי הבדיקה. <a href="privacy.html" target="_blank">מדיניות פרטיות</a></span></label>'+
+    '<div class="errmsg" id="err"></div>'+
+    '<button class="btn" id="go" type="submit">מתחילים</button></form>'+
     '<div class="about"><img src="https://success-journey.co.il/assets/matan-profile.jpg" alt="מתן רג\'ואן"><p><b>מתן רג\'ואן</b>, יועץ משכנתאות ומלווה פיננסי. מלווה משפחות ובעלי עסקים קטנים ובינוניים בסדר בכסף.</p></div></div>';
-  document.getElementById('go').onclick = function(){ idx = 0; question(true); };
+  document.getElementById('f').onsubmit = function(ev){
+    ev.preventDefault(); if(sending) return;
+    var name = document.getElementById('name'), phone = document.getElementById('phone'), err = document.getElementById('err');
+    [name,phone].forEach(function(x){x.classList.remove('err')});
+    var ph = normPhone(phone.value);
+    if(name.value.trim().length < 2){ name.classList.add('err'); err.textContent = 'נא לכתוב שם'; return; }
+    if(!/^05\d{8}$/.test(ph)){ phone.classList.add('err'); err.textContent = 'נא לכתוב מספר נייד תקין, 10 ספרות שמתחיל ב-05'; return; }
+    if(!document.getElementById('ok').checked){ err.textContent = 'צריך לסמן אישור כדי שמתן יוכל לחזור אליכם'; return; }
+    err.textContent = '';
+    LEAD = {name:name.value.trim(), phone:ph, hp:document.getElementById('website').value};
+    window.__LAST = {t:'lead_start', src:SRC, id:LID, name:LEAD.name, phone:ph, hp:LEAD.hp};
+    send(window.__LAST);
+    if(!started){ started = true; ping('start'); }
+    idx = 0; question(true);
+  };
+}
+
+function send(payload, cb){
+  if(!ENDPOINT){ if(cb) cb(true); return; }
+  fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload),keepalive:true})
+    .then(function(r){return r.json()}).then(function(j){ if(cb) cb(!!(j&&j.ok)); }).catch(function(){ if(cb) cb(false); });
 }
 
 function question(anim){
   var q = Q[idx];
   var html = '<div class="'+(anim?'screen':'')+'">'+
-    '<div class="step">שאלה '+(idx+1)+' מתוך '+Q.length+'</div>'+
+    '<div class="qtop"><div class="step">שאלה '+(idx+1)+' מתוך '+Q.length+'</div>'+
+    (idx>0?'<button class="back" id="back">→ חזרה</button>':'')+'</div>'+
     '<div class="progress"><i style="width:'+((idx+1)/Q.length*100)+'%"></i></div>'+
     '<h2>'+esc(q.q)+'</h2><div class="opts" data-q="'+q.id+'">';
   q.opts.forEach(function(o,i){ html += '<button class="opt'+(A[q.id]===o.v?' sel':'')+'" data-i="'+i+'">'+esc(o.v)+'</button>'; });
-  html += '</div><div id="subbox"></div><div class="nav">';
-  if(idx>0) html += '<button class="back" id="back">חזרה</button>';
-  html += '</div></div>';
+  html += '</div><div id="subbox"></div></div>';
   app.innerHTML = html;
   bindOpts(app.querySelector('.opts'), q, true);
   var cur = q.opts.filter(function(o){return o.v===A[q.id]})[0];
@@ -173,7 +198,6 @@ function question(anim){
 function bindOpts(box, q, main){
   box.querySelectorAll('.opt').forEach(function(btn){
     btn.onclick = function(){
-      if(!started){ started = true; ping('start'); }
       var o = q.opts[+btn.dataset.i];
       A[q.id] = o.v;
       box.querySelectorAll('.opt').forEach(function(x){x.classList.toggle('sel', x===btn)});
@@ -212,8 +236,8 @@ function evaluate(){
   var mortgage = !!find('mortgage').m;
   var fit;
   if(red) fit = 'קו אדום';
-  else if(A.commit==='לא עכשיו' && A.when==='רק בודקים בינתיים' && !mortgage) fit = 'לא מתאים';
-  else if(A.commit==='כן' && A.when!=='רק בודקים בינתיים' && level>1) fit = 'מתאים';
+  else if(A.commit==='כרגע אין לי זמן לזה' && A.when==='רק בודקים בינתיים' && !mortgage) fit = 'לא מתאים';
+  else if(A.commit==='שעה בשבוע ויותר' && A.when!=='רק בודקים בינתיים' && level>1) fit = 'מתאים';
   else fit = 'לבדיקה';
   return {pct:pct, level:level, gaps:gaps, fit:fit, mortgage:mortgage};
 }
@@ -228,66 +252,19 @@ function ring(v, lv){
 
 function result(){
   var r = evaluate(); window.__R = r;
-  var titles = {1:'המצב שלכם טוב', 2:'יש מה לסדר', 3:'הגיע הזמן לעשות סדר'};
-  var texts = {
-    1:'לפי התשובות, הבסיס אצלכם יציב. הנה כמה דברים ששווה לשים לב אליהם כדי לשמור על זה ולהתקדם ליעדים.',
-    2:'לפי התשובות, יש כמה נקודות שבהן הכסף בורח. אלה בדיוק הדברים שעובדים עליהם בפגישת מיפוי.',
-    3:'לפי התשובות, יש כמה פערים שמכבידים עליכם כל חודש. החדשות הטובות: את רובם אפשר לסדר צעד אחרי צעד.'};
-  var html = '<div class="screen"><div class="step">התוצאה שלכם</div>'+
-    ring(100-r.pct, r.level)+
-    '<p>'+texts[r.level]+'</p>';
+  var payload = {t:'lead_done', src:SRC, id:LID, name:LEAD.name, phone:LEAD.phone, hp:LEAD.hp, answers:A, pct:r.pct, level:r.level, fit:r.fit, mortgage:r.mortgage};
+  window.__LAST = payload; send(payload);
+  if(r.fit==='קו אדום'){ app.innerHTML = '<div class="screen done"><h2>תודה שמילאתם</h2></div>'; return; }
+  var html = '<div class="screen"><div class="step">התוצאה שלכם</div>'+ring(100-r.pct, r.level);
   if(r.gaps.length){ html += '<ul class="gaps">'; r.gaps.slice(0,4).forEach(function(g){ html += '<li>'+esc(g)+'</li>'; }); html += '</ul>'; }
   else html += '<ul class="gaps"><li>המשיכו לעקוב אחרי התקציב פעם בחודש.</li><li>הגדירו יעד אחד ברור לחיסכון, עם סכום ותאריך.</li></ul>';
-  if(r.fit==='קו אדום'){ html += '<p class="small">תודה שמילאתם. כרגע זה לא השירות המתאים לכם.</p></div>'; app.innerHTML = html; return; }
-  var soft = r.level===1 || r.fit==='לא מתאים';
-  html += '<div class="offer"><h2>'+(soft?'רוצים שמתן יחזור אליכם?':'פגישת מיפוי עם מתן, בלי עלות')+'</h2>'+
-    '<p>'+(soft?'אפשר להשאיר פרטים, ומתן יחזור אליכם כשנוח.':'בזום או פנים אל פנים. עוברים על התמונה המלאה ויוצאים עם צעד ראשון ברור.')+'</p></div>'+
-    form() + '</div>';
+  html += '<div class="done" style="padding-top:4px"><div class="ic">✓</div><h2>קיבלנו, תודה '+esc(LEAD.name.split(' ')[0])+'</h2><p>מתן יחזור אליכם בהקדם בטלפון או בוואטסאפ, ויעבור איתכם על התמונה המלאה.</p></div></div>';
   app.innerHTML = html;
-  bindForm(r);
-}
-
-function form(){
-  return '<form id="f" novalidate>'+
-    '<label for="name">שם</label><input type="text" id="name" autocomplete="name" maxlength="60">'+
-    '<label for="phone">טלפון נייד</label><input type="tel" id="phone" inputmode="numeric" autocomplete="tel" maxlength="14" placeholder="05X-XXXXXXX">'+
-    '<div class="row2"><div><label for="email">מייל (לא חובה)</label><input type="email" id="email" autocomplete="email" maxlength="80"></div>'+
-    '<div><label for="city">עיר</label><input type="text" id="city" maxlength="40"></div></div>'+
-    '<label>איך נוח לכם להיפגש?</label><div class="opts two" id="meet">'+
-    '<button type="button" class="opt" data-v="זום">זום</button><button type="button" class="opt" data-v="פנים אל פנים">פנים אל פנים</button></div>'+
-    '<div class="hp" aria-hidden="true"><label for="website">אתר</label><input type="text" id="website" tabindex="-1" autocomplete="off"></div>'+
-    '<label class="chk"><input type="checkbox" id="ok"> <span>אני מאשר/ת שמתן רג\'ואן ממסע להצלחה יחזור אליי בטלפון או בוואטסאפ לגבי הבדיקה.</span></label>'+
-    '<div class="errmsg" id="err"></div>'+
-    '<button class="btn" id="send" type="submit">שלחו לי</button></form>';
 }
 
 function normPhone(p){ p = String(p).replace(/[^\d+]/g,''); if(p.indexOf('+972')===0) p = '0'+p.slice(4); else if(p.indexOf('972')===0) p = '0'+p.slice(3); return p; }
 
-function bindForm(r){
-  var meet = '';
-  document.querySelectorAll('#meet .opt').forEach(function(b){ b.onclick = function(){ meet = b.dataset.v; document.querySelectorAll('#meet .opt').forEach(function(x){x.classList.toggle('sel',x===b)}); }; });
-  document.getElementById('f').onsubmit = function(ev){
-    ev.preventDefault(); if(sending) return;
-    var name = document.getElementById('name'), phone = document.getElementById('phone'), email = document.getElementById('email');
-    var err = document.getElementById('err'); [name,phone,email].forEach(function(x){x.classList.remove('err')});
-    var ph = normPhone(phone.value);
-    if(name.value.trim().length < 2){ name.classList.add('err'); err.textContent = 'נא לכתוב שם'; return; }
-    if(!/^05\d{8}$/.test(ph)){ phone.classList.add('err'); err.textContent = 'נא לכתוב מספר נייד תקין, 10 ספרות שמתחיל ב-05'; return; }
-    if(email.value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.value.trim())){ email.classList.add('err'); err.textContent = 'כתובת המייל לא תקינה'; return; }
-    if(!document.getElementById('ok').checked){ err.textContent = 'צריך לסמן אישור כדי שמתן יוכל לחזור אליכם'; return; }
-    err.textContent = ''; sending = true; var btn = document.getElementById('send'); btn.disabled = true; btn.textContent = 'שולח...';
-    var payload = {t:'lead', src:SRC, name:name.value.trim(), phone:ph, email:email.value.trim(), city:document.getElementById('city').value.trim(),
-      meet:meet, answers:A, pct:r.pct, level:r.level, fit:r.fit, mortgage:r.mortgage, hp:document.getElementById('website').value};
-    window.__LAST = payload;
-    if(!ENDPOINT){ done(); return; }
-    fetch(ENDPOINT,{method:'POST',headers:{'Content-Type':'text/plain'},body:JSON.stringify(payload)})
-      .then(function(res){return res.json()}).then(function(j){ if(j && j.ok) done(); else fail(); }).catch(fail);
-  };
-}
-
-function done(){ app.innerHTML = '<div class="screen done"><div class="ic">✓</div><h2>קיבלנו, תודה</h2><p>מתן יחזור אליכם בהקדם, בטלפון או בוואטסאפ.</p><p class="small">בינתיים, שווה להתחיל לרשום הוצאות של שבוע אחד. זה הבסיס לכל סדר בכסף.</p></div>'; }
-function fail(){ sending = false; var b = document.getElementById('send'); b.disabled = false; b.textContent = 'שלחו לי'; document.getElementById('err').textContent = 'משהו השתבש בשליחה. נסו שוב בעוד רגע.'; }
-
+var LEAD = null, LID = Date.now().toString(36)+Math.random().toString(36).slice(2,8);
 ping('visit');
 intro();
 </script>
